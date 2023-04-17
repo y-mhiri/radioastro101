@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Radio interferometry 101</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Radio Interferometry 101</h1>
+        <!-- include logo -->
+        <img src="logo.png" alt="logo" width="100" height="100">
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="main.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- a paragraph on the general principle of radio interferometry -->
+        <p>Radio interferometry is a technique used in radio astronomy to create images of celestial objects by combining signals from multiple antennas.</p>
+
+        <div>
+
+        <h2>Array configuration</h2>
+        <!-- include 3 figure : one for the antenna a configuration, one for the snaphot uv plane and for rhe uv plane with earth rotation synthesis-->
+
+        <div>
+        <div>
+        <figure>
+            <img src="antenna.png" alt="antenna" width="300" height="300">
+            <figcaption>Antenna configuration</figcaption>
+        </figure>
+        <figure>
+            <img src="uv_plane.png" alt="uv_plane" width="300" height="300">
+            <figcaption>Snapshot uv plane</figcaption>
+        </figure>
+        <figure>
+            <img src="uv_plane_earth_rotation.png" alt="uv_plane_earth_rotation" width="300" height="300">
+            <figcaption>uv plane with earth rotation synthesis</figcaption>
+        </figure>
+        </div>
+        <div>
+            <div>
+                <!-- options for simulation -->
+                <p>antennas configuration</p>
+                <select name="antennas_configuration">
+                    <option value="VLA">VLA</option>
+                    <option value="MeerKAt">MeerKat</option>
+                </select>
+                <p>synthesis time</p>
+                <input type="number" name="synthesis_time" min="1" max="100">
+                <p>integration time</p>
+                <input type="number" name="integration_time" min="1" max="100">
+                <p>pointing direction (declination)</p>
+                <input type="number" name="pointing_direction" min="1" max="100">
+                <p> right ascension of the source direction is considered to be in the zenith at middle of the observaiotion </p>
+            </div>
+            <div>
+                <!-- description and button -->
+                <p>description</p>
+                <button>Compute UV</button>
+
+            </div>
+        </div>
+
+        </div>
+
+        </div>
+
+        
+
+</body>
+</html>

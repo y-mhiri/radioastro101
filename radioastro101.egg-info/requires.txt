@@ -1,0 +1,9 @@
+numpy==1.21.1
+scipy==1.9.1
+scikit-image==0.20.0
+ducc0==0.29.0
+zarr==2.14.2
+click==8.0.0
+astropy==5.2.1
+dash==2.9.1
+pandas==1.5.3
