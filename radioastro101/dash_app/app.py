@@ -57,8 +57,7 @@ app.layout = serve_layout
     Input('btn', 'n_clicks')]
 )
 def generate_antenna_plot(antennas_configuration, synthesis_time, integration_time, pointing_direction, wavelength, sky_model, n_clicks):
-
-    antenna_positions, telescope_location_lon_lat = load_telescope_from_itrf(f'{ROOT_DIR}/../data/telescopes/{antennas_configuration}.itrf')
+    antenna_positions, telescope_location_lon_lat = load_telescope_from_itrf(f'/opt/radioastro101/data/telescopes/{antennas_configuration}.itrf')
 
     uvw_snapshot, _ = compute_uvw_synthesis(antenna_positions=
     antenna_positions,
@@ -82,7 +81,7 @@ def generate_antenna_plot(antennas_configuration, synthesis_time, integration_ti
     uvw_snapshot = np.concatenate((uvw_snapshot, -uvw_snapshot), axis=0)
 
     
-    sky_image =  load_sky_model(f'{ROOT_DIR}/../data/sky_models/{sky_model}.png')
+    sky_image =  load_sky_model(f'/opt/radioastro101/data/sky_models/{sky_model}.png')
 
 
     dirty_beam = compute_dirty_beam(uvw, wavelength, npix_x=sky_image.shape[0], npix_y=sky_image.shape[1])
@@ -92,27 +91,32 @@ def generate_antenna_plot(antennas_configuration, synthesis_time, integration_ti
     uvw_snapshot = uvw_snapshot / wavelength 
 
     fig = make_subplots(rows=2, cols=3)
-    # make nice plot of the antenna positions, uvw  and uvw_snapshot
 
-    fig.add_trace(go.Scatter(x=antenna_positions[:, 0], y=antenna_positions[:, 1], mode='markers', name='antenna positions'), row=1, col=1)
-    fig.add_trace(go.Scatter(x=uvw[:, 0], y=uvw[:, 1], mode='markers', name='uvw'), row=1, col=2)
-    fig.add_trace(go.Scatter(x=uvw_snapshot[:, 0], y=uvw_snapshot[:, 1], mode='markers', name='uvw snapshot'), row=1, col=3)
+   # use a colormap relevant to astronomy 
+    fig.add_trace(go.Heatmap(z=dirty_image, colorscale='viridis', showscale=False), row=1, col=1)
+    fig.add_trace(go.Heatmap(z=dirty_beam, colorscale='viridis', showscale=False), row=1, col=2)
+    fig.add_trace(go.Heatmap(z=sky_image, colorscale='viridis', showscale=False), row=1, col=3)
+
+
+    fig.add_trace(go.Scatter(x=antenna_positions[:, 0], y=antenna_positions[:, 1], mode='markers', name='antenna positions'), row=2, col=1)
+    fig.add_trace(go.Scatter(x=uvw[:, 0], y=uvw[:, 1], mode='markers', name='uvw'), row=2, col=2)
+    fig.add_trace(go.Scatter(x=uvw_snapshot[:, 0], y=uvw_snapshot[:, 1], mode='markers', name='uvw snapshot'), row=2, col=3)
 
     # remove the grid lines
-    fig.update_xaxes(showgrid=False, row=1, col=1)
-    fig.update_yaxes(showgrid=False, row=1, col=1)
-    fig.update_xaxes(showgrid=False, row=1, col=2)
-    fig.update_yaxes(showgrid=False, row=1, col=2)
-    fig.update_xaxes(showgrid=False, row=1, col=3)
-    fig.update_yaxes(showgrid=False, row=1, col=3)
+    fig.update_xaxes(showgrid=False, row=2, col=1)
+    fig.update_yaxes(showgrid=False, row=2, col=1)
+    fig.update_xaxes(showgrid=False, row=2, col=2)
+    fig.update_yaxes(showgrid=False, row=2, col=2)
+    fig.update_xaxes(showgrid=False, row=2, col=3)
+    fig.update_yaxes(showgrid=False, row=2, col=3)
 
     # remove ticks for antenna positions
-    fig.update_xaxes(showticklabels=False, row=1, col=1)
-    fig.update_yaxes(showticklabels=False, row=1, col=1)
-    fig.update_xaxes(showticklabels=False, row=1, col=2)
-    fig.update_yaxes(showticklabels=False, row=1, col=2)
-    fig.update_xaxes(showticklabels=False, row=1, col=3)
-    fig.update_yaxes(showticklabels=False, row=1, col=3)
+    fig.update_xaxes(showticklabels=False, row=2, col=1)
+    fig.update_yaxes(showticklabels=False, row=2, col=1)
+    fig.update_xaxes(showticklabels=False, row=2, col=2)
+    fig.update_yaxes(showticklabels=False, row=2, col=2)
+    fig.update_xaxes(showticklabels=False, row=2, col=3)
+    fig.update_yaxes(showticklabels=False, row=2, col=3)
 
 
     # # have only extreme values for the ticks 
@@ -124,25 +128,21 @@ def generate_antenna_plot(antennas_configuration, synthesis_time, integration_ti
 
     
 
-    # use a colormap relevant to astronomy 
-    fig.add_trace(go.Heatmap(z=dirty_image, colorscale='viridis', showscale=False), row=2, col=1)
-    fig.add_trace(go.Heatmap(z=dirty_beam, colorscale='viridis', showscale=False), row=2, col=2)
-    fig.add_trace(go.Heatmap(z=sky_image, colorscale='viridis', showscale=False), row=2, col=3)
+ 
+    fig.update_xaxes(showticklabels=False, row=1, col=1)
+    fig.update_yaxes(showticklabels=False, row=1, col=1)
+    fig.update_xaxes(showticklabels=False, row=1, col=2)
+    fig.update_yaxes(showticklabels=False, row=1, col=2)
+    fig.update_xaxes(showticklabels=False, row=1, col=3)
+    fig.update_yaxes(showticklabels=False, row=1, col=3)
 
 
-    fig.update_xaxes(title_text="x [m]", row=1, col=1)
-    fig.update_yaxes(title_text="y [m]", row=1, col=1)
-    fig.update_xaxes(title_text="u [m]", row=1, col=2)
-    fig.update_yaxes(title_text="v [m]", row=1, col=2)
-    fig.update_xaxes(title_text="u [m]", row=1, col=3)
-    fig.update_yaxes(title_text="v [m]", row=1, col=3)
-
-    fig.update_xaxes(showticklabels=False, row=2, col=1)
-    fig.update_yaxes(showticklabels=False, row=2, col=1)
-    fig.update_xaxes(showticklabels=False, row=2, col=2)
-    fig.update_yaxes(showticklabels=False, row=2, col=2)
-    fig.update_xaxes(showticklabels=False, row=2, col=3)
-    fig.update_yaxes(showticklabels=False, row=2, col=3)
+    fig.update_xaxes(title_text="x [m]", row=2, col=1)
+    fig.update_yaxes(title_text="y [m]", row=2, col=1)
+    fig.update_xaxes(title_text="u [m]", row=2, col=2)
+    fig.update_yaxes(title_text="v [m]", row=2, col=2)
+    fig.update_xaxes(title_text="u [m]", row=2, col=3)
+    fig.update_yaxes(title_text="v [m]", row=2, col=3)
 
     fig.update_layout(plot_bgcolor="rgba(0,0,0,0)", showlegend=False)
 
@@ -151,8 +151,8 @@ def generate_antenna_plot(antennas_configuration, synthesis_time, integration_ti
 
 
 
-    fig.update_layout(height=800, width=2400)
-
+    fig.update_layout()
+    print("here")
 
     return fig
 

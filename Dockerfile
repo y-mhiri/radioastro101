@@ -11,16 +11,9 @@ RUN apt-get update && apt-get install -y \
  software-properties-common \
  git
 
-# Add KERN Suite repository and install python3-casacore
-# RUN add-apt-repository -s ppa:kernsuite/kern-8 && \
-#  apt-add-repository multiverse && \
-#  apt-add-repository restricted && \
-#  apt-get update && \
-#  apt-get install -y python3-casacore
-
 EXPOSE 8050
 # Copy source code of the webapp
-COPY . /opt/radioastro101
+COPY ./radioastro101 /opt/radioastro101
 
 # Set the working directory
 WORKDIR /opt/radioastro101

@@ -5,12 +5,18 @@ from dash import html
 
 import plotly.express as px
 
+def entry_layout(description, component):
+    return html.Div([ 
+        html.P(description),
+        component
+       ], className='entry')
+
 def serve_layout():
         
     return html.Div([
         html.Header([
             html.H1('Radio Interferometry 101'),
-            html.Img(src='logo.png', alt='logo', width='100', height='100')
+            html.Img(src='/opt/radioastro101/data/misc/logo.svg', alt='logo', width='100', height='100')
         ]),
 
         # html.Nav([
@@ -30,9 +36,9 @@ def serve_layout():
                 html.Div([
                     html.Div([
                         dcc.Graph(id='array_configuration', figure=px.scatter())
-                    ]),
+                    ], id='figure'),
                     html.Div([
-                        html.P('antennas configuration'),
+                        html.Div([html.P('Array configuration'),
                         dcc.Dropdown(
                             id='antennas_configuration',
                             options=[
@@ -42,7 +48,9 @@ def serve_layout():
                                 {'label': 'Kat-7', 'value': 'kat-7'},
                             ],
                             value='kat-7'
-                        ),
+                        )], className='entry'),
+                        
+                        entry_layout("Sky model : ",
                         dcc.Dropdown(
                             id='sky_model',
                             options=[
@@ -52,8 +60,10 @@ def serve_layout():
                                 {'label': 'M31 radiogalaxy', 'value': 'm31'}
                             ],
                             value='gaussian_source'
-                        ),
-                        html.P('synthesis time'),
+                        )
+                        )
+                        ,
+                        entry_layout('Synthesis time',
                         dcc.Input(
                             type='number',
                             name='synthesis_time',
@@ -61,8 +71,9 @@ def serve_layout():
                             min=0,
                             max=12,
                             value=1
-                        ),
-                        html.P('integration time'),
+                            # className="input"
+                        )),
+                        entry_layout('Integration time',
                         dcc.Input(
                             type='number',
                             name='integration_time',
@@ -70,8 +81,8 @@ def serve_layout():
                             min=0,
                             max=36000,
                             value=60
-                        ),
-                        html.P('observation wavelength'),
+                        )),
+                        entry_layout('Observation wavelength',
                         dcc.Input(
                             type='number',
                             name='wavelength',
@@ -79,8 +90,8 @@ def serve_layout():
                             min=0,
                             max=10,
                             value=0.1
-                        ),
-                        html.P('pointing direction (declination)'),
+                        )),
+                        entry_layout('Pointing direction (declination)',
                         dcc.Input(
                             type='number',
                             name='pointing_direction',
@@ -88,12 +99,11 @@ def serve_layout():
                             min=0,
                             max=100,
                             value=35
-                        ),
-                        html.P('right ascension of the source direction is considered to be in the zenith at middle of the observation')
+                        )),
                     ]),
                     html.Div([
                         html.P('description'),
-                        html.Button('Compute UV', id='btn'),
+                        html.Button('Run', id='btn'),
                     ])
                 ])
             ])
